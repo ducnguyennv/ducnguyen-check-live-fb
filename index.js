@@ -2,12 +2,20 @@ const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 require('dotenv').config();
 
-// Khởi tạo bot
+// Khởi tạo bot với polling (cần thiết cho Replit)
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {polling: true});
 
 // Lưu trữ UID cho mỗi user
 const watchList = new Map();
 const intervals = new Map();
+
+// Thêm web server đơn giản để keep alive
+const http = require('http');
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('Bot is running!');
+});
+server.listen(3000);
 
 // Hàm check UID
 async function checkUID(uid) {
